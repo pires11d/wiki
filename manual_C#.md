@@ -30,8 +30,8 @@ HashSet<Conta> conjunto1 = new HashSet<Conta>();
 SortedSet<Conta> conjunto2 = new SortedSet<Conta>();
 
 // dicionários:
-Dictionary<string,double> dict1 = new Dictionary<string,double>();
-SortedDictionary<string,double> dict2 = new SortedDictionary<string,double>();
+Dictionary<string,Conta> dict1 = new Dictionary<string,Conta>();
+SortedDictionary<string,Conta> dict2 = new SortedDictionary<string,Conta>();
 ~~~
 
 #
@@ -99,7 +99,7 @@ public class Conta
 
 Criamos um objeto da classe *Conta* em `Program.cs` e assim podemos fazer o uso dos métodos *get* e *set*!
 ~~~c#
-Conta c = new Conta()
+Conta c = new Conta();
 
 // uso do get
 c.Numero = 12345;
@@ -552,7 +552,7 @@ try
 {
 	// conexão com o banco
 	con = new SqlConnection(connectionString);
-    con.Open();
+	con.Open();
 	// comando SQL
 	cmd = new SqlCommand(commandString, con);	
 	// execução do comando
@@ -582,9 +582,9 @@ Ou de maneira simplificada, com o *using*:
 using (SqlConnection con = new SqlConnection(connectionString))
 {
 	// comando SQL
-    using (SqlCommand cmd = new SqlCommand(commandString, con))
-    {
-        con.Open();		
+	using (SqlCommand cmd = new SqlCommand(commandString, con))
+	{
+		con.Open();		
 		
 		SqlDataReader dr = cmd.ExecuteReader();
 
