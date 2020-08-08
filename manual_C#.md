@@ -1,7 +1,7 @@
 # C# - Noções básicas de orientação a objeto
 
 
-## 1. Tipos de objetos
+## 1. Tipos de objetos 
 ~~~c#
 // tipos principais:
 int indice;
@@ -513,3 +513,97 @@ using(StreamWriter escritor = new StreamWriter(arquivo))
     // aqui dentro voce pode utilizar tanto o escritor quanto o arquivo
 };
 ~~~
+
+#
+
+## 14. Biblioteca System.Data.SqlClient
+
+
+Namespaces necessários:
+~~~c#
+using System.Data;
+using System.Data.SqlClient;
+~~~
+
+Construindo a string de conexão:
+~~~c#
+// informações principais
+string server = "localhost";
+string username = "usuario";
+string password = "senha";
+string database = "banco de dados";
+
+// montagem da string de conexão
+string connectionString = "Data Source=" + server + ";";
+connectionString += "User ID=" + username + ";";
+connectionString += "Password=" + password + ";";
+connectionString += "Initial Catalog=" + database;
+~~~
+E a string da query SQL:
+~~~c#
+string commandString = "SELECT * FROM contas";
+~~~
+
+Criando uma instância do objeto SqlConnection com a string de conexão como argumento:
+~~~c#
+SqlConnection con = null;
+SqlCommand cmd = null;
+try
+{
+	// conexão com o banco
+	con = new SqlConnection(connectionString);
+    con.Open();
+	// comando SQL
+	cmd = new SqlCommand(commandString, con);	
+	// execução do comando
+	SqlDataReader dr = cmd.ExecuteReader(); 
+	// lendo o que a consulta retornou
+	while (dr.Read())
+	{
+		//...
+	}
+}
+catch (Exception Ex)
+{
+	MessageBox.Show(Ex.Message);
+}
+finally
+{
+    if (null != com);
+        cmd.Dispose();
+    if (null != con)
+        con.Dispose();
+}
+~~~
+
+Ou de maneira simplificada, com o *using*:
+~~~c#
+// conexão com o banco
+using (SqlConnection con = new SqlConnection(connectionString))
+{
+	// comando SQL
+    using (SqlCommand cmd = new SqlCommand(commandString, con))
+    {
+        con.Open();		
+		
+		SqlDataReader dr = cmd.ExecuteReader();
+
+		while (dr.Read())
+		{
+			//...
+		}
+	}
+}
+~~~
+
+>**OBS**: As Classes *SqlConnection* e *SqlCommand* implementam a interface *IDisposable* e isto significa que eles podem usar recursos não gerenciados e liberar tais recursos é trabalho do desenvolvedor, de forma que depois de usar estas classes temos que chamar o método *Dispose*(). Se ocorrer uma exeção no acesso ao banco de dados temos que ter certeza que o *Dispose*() foi chamado, e este é um motivo para usar a palavra reservada ***using***.
+
+Possíveis estados de uma conexão com o banco (*SqlConnection.State*):
+- Broken
+- Closed
+- Connecting
+- Executing
+- Fetching
+- Open
+
+
